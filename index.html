@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArogyaVani - Multilingual Healthcare Access & Safety Assistant | Team Bug Busters</title>
+  
+  <!-- Tailwind CSS via reliable CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- ================= TOP HACKATHON BRANDING & HEADER ================= -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Project Info -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-sky-600 to-teal-500 flex items-center justify-center text-white shadow-md">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 id="app-title-text" class="text-base font-bold text-slate-900 leading-tight">
+              ArogyaVani: Multilingual Healthcare Access & Safety Assistant
+            </h1>
+            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+              Problem ID: S7
+            </span>
+          </div>
+          <p class="text-xs text-slate-500">
+            DELULU TO DEPLOY • <strong>Team Bug Busters</strong> (Surutheeswari M, Soundarya K, Dhana Lakshmi N - FMCET)
+          </p>
+        </div>
+      </div>
+
+      <!-- Center Nav Tabs (Patient App vs Hospital Dashboard vs Split) -->
+      <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+        <button id="nav-tab-patient" onclick="switchView('patient')" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:bg-slate-200/60 transition">
+          📱 Patient Mobile App
+        </button>
+        <button id="nav-tab-doctor" onclick="switchView('doctor')" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:bg-slate-200/60 transition">
+          🏥 Doctor Dashboard
+        </button>
+        <button id="nav-tab-split" onclick="switchView('split')" class="px-3.5 py-1.5 rounded-lg bg-sky-600 text-white shadow-sm transition">
+          ⚖️ Split View (Live Demo)
+        </button>
+      </div>
+
+      <!-- Right Controls: Language Switcher, Implementation Plan & SOS Mode -->
+      <div class="flex items-center gap-2">
+        <!-- Language Selector (English Default) -->
+        <div class="flex items-center gap-1 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1">
+          <span class="text-xs text-slate-500 font-medium">🌐</span>
+          <select id="language-select" onchange="changeLanguage(this.value)" class="bg-transparent text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
+            <option value="ta" selected>தமிழ் (Tamil)</option>
+            <option value="en">English</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="ml">മലയാളം (Malayalam)</option>
+          </select>
+        </div>
+
+        <!-- Implementation Plan & Presentation Deck Modal Button -->
+        <button onclick="showPresentationModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow flex items-center gap-1.5 transition" title="View Implementation Plan & Architecture">
+          <span>📋 Plan & Architecture</span>
+        </button>
+
+        <!-- Emergency SOS Button -->
+        <button onclick="triggerEmergencySOS()" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow pulse-emergency flex items-center gap-1.5">
+          <span>🚨 SOS (108)</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Live Architecture Pipeline Stepper Bar -->
+    <div class="bg-white border-t border-slate-200 py-2 px-4 text-xs">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-sky-500 animate-ping"></span>
+            Pipeline Workflow:
+          </span>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+          <div id="pipe-step-1" class="pipeline-step px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm">
+            <span class="step-indicator w-4 h-4 rounded-full bg-slate-300 text-slate-700 text-[10px] flex items-center justify-center font-bold">1</span>
+            <span>User Input</span>
+          </div>
+          <span class="text-slate-400 font-bold">➔</span>
+          <div id="pipe-step-2" class="pipeline-step px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm">
+            <span class="step-indicator w-4 h-4 rounded-full bg-slate-300 text-slate-700 text-[10px] flex items-center justify-center font-bold">2</span>
+            <span>Language Detection</span>
+          </div>
+          <span class="text-slate-400 font-bold">➔</span>
+          <div id="pipe-step-3" class="pipeline-step px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm">
+            <span class="step-indicator w-4 h-4 rounded-full bg-slate-300 text-slate-700 text-[10px] flex items-center justify-center font-bold">3</span>
+            <span>Translation</span>
+          </div>
+          <span class="text-slate-400 font-bold">➔</span>
+          <div id="pipe-step-4" class="pipeline-step px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm">
+            <span class="step-indicator w-4 h-4 rounded-full bg-slate-300 text-slate-700 text-[10px] flex items-center justify-center font-bold">4</span>
+            <span>AI Assistant</span>
+          </div>
+          <span class="text-slate-400 font-bold">➔</span>
+          <div id="pipe-step-5" class="pipeline-step px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm">
+            <span class="step-indicator w-4 h-4 rounded-full bg-slate-300 text-slate-700 text-[10px] flex items-center justify-center font-bold">5</span>
+            <span>Safety Check</span>
+          </div>
+          <span class="text-slate-400 font-bold">➔</span>
+          <div id="pipe-step-6" class="pipeline-step px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm">
+            <span class="step-indicator w-4 h-4 rounded-full bg-slate-300 text-slate-700 text-[10px] flex items-center justify-center font-bold">6</span>
+            <span>Response Translation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prominent Medical Safety & Trusted Healthcare Information Disclaimer -->
+    <div class="bg-amber-50 border-t border-amber-200 py-1.5 px-4 text-xs">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-amber-900">
+        <div class="flex items-center gap-2 font-medium">
+          <span class="bg-amber-200 text-amber-900 px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wide">
+            🛡️ Safety & Medical Disclaimer
+          </span>
+          <span>
+            The system uses trusted healthcare information and <strong>does not present itself as a doctor or provide unsupported medical diagnosis</strong>. In acute emergencies, call 108 immediately.
+          </span>
+        </div>
+        <div class="flex items-center gap-3 text-[11px] font-semibold text-amber-800">
+          <span>WHO Guidelines Aligned</span>
+          <span>•</span>
+          <span>Zero Personal Data Retention</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Hackathon Presenter Action Bar (English First + Regional Demos) -->
+    <div class="bg-gradient-to-r from-sky-50 via-indigo-50 to-emerald-50 border-t border-slate-200 py-1.5 px-4 text-xs">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-center gap-1.5 text-slate-600">
+          <span class="font-bold text-slate-800">⚡ Live Scenarios:</span>
+          <button onclick="changeLanguage('en'); handlePatientSubmit('Severe crushing chest pain radiating to my left arm with cold sweat.'); switchView('split');" class="bg-white hover:bg-red-50 border border-red-200 text-red-700 px-2 py-0.5 rounded text-[11px] font-semibold transition shadow-sm">
+            1. 🔴 Acute Chest Pain (English)
+          </button>
+          <button onclick="changeLanguage('en'); handlePatientSubmit('High grade fever 102 degrees for 3 days with intense headache and vomiting.'); switchView('split');" class="bg-white hover:bg-amber-50 border border-amber-200 text-amber-800 px-2 py-0.5 rounded text-[11px] font-semibold transition shadow-sm">
+            2. 🟡 High Fever 102°F (English)
+          </button>
+          <button onclick="changeLanguage('ta'); handlePatientSubmit('கடுமையான நெஞ்சு வலி மற்றும் இடது கைக்கு வலி பரவுகிறது.'); switchView('split');" class="bg-white hover:bg-red-50 border border-red-200 text-red-700 px-2 py-0.5 rounded text-[11px] font-semibold transition shadow-sm" title="Demonstrates Tamil Speech to English Doctor ICD-10">
+            3. 🔴 Cardiac (Tamil -> English)
+          </button>
+          <button onclick="changeLanguage('hi'); handlePatientSubmit('मुझे 3 दिनों से 102 डिग्री तेज बुखार और उल्टी है।'); switchView('split');" class="bg-white hover:bg-amber-50 border border-amber-200 text-amber-800 px-2 py-0.5 rounded text-[11px] font-semibold transition shadow-sm" title="Demonstrates Hindi Speech to English Doctor ICD-10">
+            4. 🟡 Infection (Hindi -> English)
+          </button>
+          <button onclick="changeLanguage('en'); handlePatientSubmit('Mild runny nose and slight cough for 2 days without difficulty in breathing.'); switchView('split');" class="bg-white hover:bg-emerald-50 border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-semibold transition shadow-sm">
+            5. 🟢 Common Cold (English)
+          </button>
+          <button onclick="showJargonModal()" class="bg-white hover:bg-sky-50 border border-sky-200 text-sky-700 px-2 py-0.5 rounded text-[11px] font-semibold transition">
+            📖 Jargon Simplifier
+          </button>
+          <button onclick="showFirstAidModal()" class="bg-white hover:bg-emerald-50 border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-semibold transition">
+            🩺 Offline First-Aid
+          </button>
+          <button onclick="showPresentationModal(7)" class="bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 px-2 py-0.5 rounded text-[11px] font-semibold transition">
+            📋 Roadmap & Stack
+          </button>
+        </div>
+        <div class="text-[11px] text-slate-500 font-medium hidden lg:block">
+          Python Flask/FastAPI Backend • LLM/NLP • ICD-10 Coding • 108 SOS
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+      
+      <!-- ================= LEFT / PRIMARY: PATIENT MOBILE APP VIEW ================= -->
+      <section id="patient-view-panel" class="md:col-span-5 lg:col-span-5 w-full">
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col h-[740px]">
+          
+          <!-- Mobile Status Bar Mockup -->
+          <div class="bg-slate-900 text-white px-5 py-2 flex items-center justify-between text-[11px]">
+            <span class="font-medium">9:41 AM</span>
+            <div class="flex items-center gap-1.5">
+              <span>5G</span>
+              <span>📶</span>
+              <span>🔋 98%</span>
+            </div>
+          </div>
+
+          <!-- Patient Header -->
+          <div class="bg-gradient-to-r from-sky-600 to-sky-700 text-white p-4">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm">
+                  🩺
+                </div>
+                <div>
+                  <h3 class="font-bold text-sm leading-none">ArogyaVani Assistant</h3>
+                  <span class="text-[11px] text-sky-100">24/7 Multilingual Triage</span>
+                </div>
+              </div>
+              <span class="bg-white/20 text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm">
+                AI Active
+              </span>
+            </div>
+            <p id="app-tagline-text" class="text-xs text-sky-100 leading-snug">
+              Real-Time Multilingual Healthcare Access & Clinical Safety Triage
+            </p>
+          </div>
+
+          <!-- Triage Status Banner (Dynamic: Green, Yellow, Red) -->
+          <div class="px-4 pt-3">
+            <div id="patient-triage-banner" class="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="inline-block h-3.5 w-3.5 rounded-full bg-emerald-500"></span>
+                <div>
+                  <h4 class="font-bold text-xs uppercase tracking-wide text-emerald-700">Triage: GREEN (Code 3)</h4>
+                  <p class="text-xs text-emerald-700">Stable condition. Routine general advice and basic home care.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Chat History Feed -->
+          <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/60">
+            <!-- Populated dynamically by app.js -->
+          </div>
+
+          <!-- Quick Symptoms Suggestions -->
+          <div class="px-4 py-2 bg-white border-t border-slate-100">
+            <p id="quick-symptoms-title" class="text-[11px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">
+              Common Symptoms:
+            </p>
+            <div id="quick-symptoms-container" class="grid grid-cols-2 gap-1.5">
+              <!-- Rendered dynamically in app.js based on chosen language -->
+            </div>
+          </div>
+
+          <!-- Input Bar with Voice & Send -->
+          <div class="p-3.5 bg-white border-t border-slate-200">
+            <!-- Audio Waveform (Visible while recording) -->
+            <div id="audio-waveform" class="hidden mb-2 p-2 bg-sky-50 border border-sky-200 rounded-xl flex items-center justify-center gap-1.5">
+              <div class="waveform-bar"></div>
+              <div class="waveform-bar"></div>
+              <div class="waveform-bar"></div>
+              <div class="waveform-bar"></div>
+              <div class="waveform-bar"></div>
+              <span id="mic-status-text" class="text-xs font-bold text-sky-700 ml-2">Listening... Speak now</span>
+            </div>
+
+            <!-- Language Detect Badge (shown briefly after each message) -->
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="flex items-center gap-1 text-[10px] text-slate-400 font-medium">
+                <span>🤖</span>
+                <span id="auto-detect-label">Auto Language Detection Active</span>
+              </div>
+              <span
+                id="lang-detect-badge"
+                class="opacity-0 transition-opacity duration-500 text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-200"
+              ></span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <!-- Voice Input Button -->
+              <button id="mic-button" onclick="toggleVoiceRecognition()" class="w-11 h-11 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center shadow-md transition flex-shrink-0" title="Voice Input">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path>
+                </svg>
+              </button>
+
+              <!-- Text Input -->
+              <input id="patient-input" type="text" placeholder="e.g., I have severe chest pain, fever, or shortness of breath..." class="flex-1 bg-slate-100 border border-slate-300 rounded-2xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+
+              <!-- Send Button -->
+              <button onclick="handlePatientSubmit()" class="w-11 h-11 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white flex items-center justify-center shadow-md transition flex-shrink-0" title="Submit">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Bottom utility buttons -->
+            <div class="flex items-center justify-between mt-2.5 pt-2 border-t border-slate-100 text-[11px]">
+              <button onclick="showJargonModal()" class="text-sky-600 hover:underline font-semibold flex items-center gap-1">
+                <span>📖</span>
+                <span id="jargon-btn-text">Medical Jargon Simplifier</span>
+              </button>
+              <button onclick="showFirstAidModal()" class="text-emerald-700 hover:underline font-semibold flex items-center gap-1">
+                <span>🩺</span>
+                <span>Offline First-Aid</span>
+              </button>
+            </div>
+
+          </div>
+
+
+        </div>
+      </section>
+
+      <!-- ================= RIGHT: HOSPITAL & DOCTOR CLINICAL DASHBOARD ================= -->
+      <section id="doctor-view-panel" class="md:col-span-7 lg:col-span-7 w-full">
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col h-[740px]">
+          
+          <!-- Hospital Header -->
+          <div class="bg-slate-900 text-white p-4 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center font-bold">
+                🏥
+              </div>
+              <div>
+                <h2 class="font-bold text-sm leading-tight flex items-center gap-2">
+                  Emergency Medical Center - Clinical Triage Portal
+                  <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-0.5 rounded-full border border-red-500/30 animate-pulse">
+                    Live Stream
+                  </span>
+                </h2>
+                <p class="text-xs text-slate-400">
+                  Doctor: <strong>Dr. R. Sundar, MD (Emergency Medicine)</strong> • FMCET Health Center
+                </p>
+              </div>
+            </div>
+
+            <!-- Emergency Bed Indicator -->
+            <div class="hidden sm:flex items-center gap-2 text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span class="text-slate-300">ICU Beds: <strong>3 Available</strong></span>
+            </div>
+          </div>
+
+          <!-- Doctor Workspace Split: Left Queue, Right Details -->
+          <div class="flex-1 grid grid-cols-1 sm:grid-cols-12 overflow-hidden">
+            
+            <!-- Left Column: Patient Triage Admission Queue (4 cols) -->
+            <div class="sm:col-span-5 border-r border-slate-200 bg-slate-50 flex flex-col overflow-hidden">
+              <div class="p-3 border-b border-slate-200 bg-white flex items-center justify-between">
+                <span class="font-bold text-xs uppercase tracking-wider text-slate-700">Incoming Patients</span>
+                <span id="doctor-queue-count" class="bg-sky-100 text-sky-800 font-bold text-[10px] px-2 py-0.5 rounded-full">
+                  3 Patients
+                </span>
+              </div>
+
+              <!-- Queue list scrollable -->
+              <div id="doctor-queue-list" class="flex-1 overflow-y-auto p-3 space-y-2">
+                <!-- Rendered dynamically in app.js -->
+              </div>
+            </div>
+
+            <!-- Right Column: Active Patient Detail, Translation & Clinical Summary (7 cols) -->
+            <div id="doctor-patient-detail" class="sm:col-span-7 flex flex-col overflow-y-auto bg-slate-50/50">
+              <!-- Rendered dynamically in app.js -->
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= EMERGENCY SOS MODAL (108 AMBULANCE DISPATCH) ================= -->
+  <div id="emergency-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border-4 border-red-500 overflow-hidden animate-modal-pop">
+      
+      <!-- Top Emergency Siren Header -->
+      <div class="bg-red-600 text-white p-5 text-center relative overflow-hidden">
+        <div id="siren-wave" class="w-16 h-16 rounded-full bg-white/20 mx-auto flex items-center justify-center text-3xl mb-2">
+          🚨
+        </div>
+        <h2 class="text-xl font-extrabold uppercase tracking-wide">
+          108 Emergency Ambulance Dispatched
+        </h2>
+        <p class="text-xs text-red-100 mt-1">
+          உடனடி அவசர சிகிச்சை வாகனம் புறப்பட்டுவிட்டது • Critical Alert Broadcasted
+        </p>
+      </div>
+
+      <!-- Dispatch Details -->
+      <div class="p-6 space-y-4">
+        
+        <!-- Live ETA -->
+        <div class="bg-red-50 border border-red-200 rounded-2xl p-4 text-center">
+          <span class="text-xs font-bold text-red-700 uppercase tracking-wider block">Estimated Time of Arrival</span>
+          <div id="sos-eta-timer" class="text-3xl font-extrabold text-red-600 mt-1 font-mono">
+            06:45 mins
+          </div>
+          <p class="text-xs text-slate-600 mt-1">
+            Emergency Vehicle: <strong class="text-slate-900">TN-58-EM-2024</strong> (Advanced Cardiac Life Support)
+          </p>
+        </div>
+
+        <!-- Paramedic & GPS Coordinates -->
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl">
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Assigned Paramedic</span>
+            <span class="font-bold text-slate-800">Officer Murugan, EMT</span>
+            <span class="text-emerald-600 font-bold block mt-1">📞 +91 98420-10800</span>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl">
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">GPS Beacon</span>
+            <span class="font-bold text-slate-800">FMCET Campus, Madurai</span>
+            <span class="text-slate-500 font-mono block mt-1">10.024°N, 78.145°E</span>
+          </div>
+        </div>
+
+        <!-- Emergency First-Aid Instructions While Waiting -->
+        <div class="bg-slate-100 rounded-xl p-3.5 text-xs text-slate-700">
+          <h4 id="emergency-inst-title" class="font-bold text-slate-900 mb-1">உடனடி முதலுதவி வழிகாட்டுதல்:</h4>
+          <ul id="emergency-inst-list" class="list-disc pl-4 space-y-1 text-slate-600">
+            <li>நோயாளியை அமைதியாக படுக்க வைக்கவும்; பதற்றமடைய வேண்டாம்.</li>
+            <li>நெருக்கமான ஆடைகளைத் தளர்த்தி, தாராளமாக காற்று வீச அனுமதிக்கவும்.</li>
+            <li>மருத்துவர் அனுமதியின்றி திட உணவோ நீரோ ஊட்ட வேண்டாம்.</li>
+          </ul>
+        </div>
+
+        <!-- Action Button -->
+        <div class="pt-2 flex justify-end gap-2">
+          <button onclick="closeEmergencyModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-xs transition">
+            Close & Track Live on Dashboard
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MEDICAL JARGON SIMPLIFIER MODAL ================= -->
+  <div id="jargon-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="bg-gradient-to-r from-sky-600 to-indigo-600 text-white p-4 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-sm">Medical Jargon Simplifier (மருத்துவ கலைச்சொல் விளக்கம்)</h3>
+          <p class="text-xs text-sky-100">Translating complex clinical terms into everyday layman language</p>
+        </div>
+        <button onclick="closeJargonModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-sm font-bold">
+          ✕
+        </button>
+      </div>
+
+      <div id="jargon-list-container" class="p-4 overflow-y-auto flex-1">
+        <!-- Rendered in app.js -->
+      </div>
+
+      <div class="p-3 bg-slate-50 border-t border-slate-200 text-right">
+        <button onclick="closeJargonModal()" class="bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FIRST-AID OFFLINE MODAL ================= -->
+  <div id="firstaid-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="bg-emerald-600 text-white p-4 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-sm">Offline First-Aid Handbook (அவசர முதலுதவி)</h3>
+          <p class="text-xs text-emerald-100">WHO compliant guidelines accessible without internet connectivity</p>
+        </div>
+        <button onclick="closeFirstAidModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-sm font-bold">
+          ✕
+        </button>
+      </div>
+
+      <div class="p-4 overflow-y-auto flex-1 space-y-3 text-xs">
+        <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
+          <h4 class="font-bold text-slate-900 text-sm mb-1 text-red-600">1. மாரடைப்பு சந்தேகம் (Heart Attack First Aid)</h4>
+          <p class="text-slate-700 leading-relaxed">நோயாளியை 45 டிகிரி கோணத்தில் அமர வைக்கவும். உடனடியாக 108 ஆழைக்கவும். மருத்துவர் முந்தைய பரிந்துரை இருந்தால் Aspirin 300mg மெல்ல கொடுக்கலாம்.</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
+          <h4 class="font-bold text-slate-900 text-sm mb-1 text-amber-600">2. பாம்புக்கடி (Snake Bite)</h4>
+          <p class="text-slate-700 leading-relaxed">கடிபட்ட இடத்தை இதய மட்டத்திற்கு கீழே வைக்கவும். கயிற்றால் இறுக்கமாகக் கட்டவோ, வாயால் உறிஞ்சவோ கூடாது. உடனடியாக மருத்துவமனைக்கு கொண்டு செல்லவும்.</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
+          <h4 class="font-bold text-slate-900 text-sm mb-1 text-sky-600">3. பக்கவாதம் (Stroke - F.A.S.T)</h4>
+          <p class="text-slate-700 leading-relaxed"><strong>F (Face)</strong>: முகம் கோணலாகிறதா? <strong>A (Arm)</strong>: கையைத் தூக்க முடிகிறதா? <strong>S (Speech)</strong>: பேசத் தடுமாறுகிறாரா? <strong>T (Time)</strong>: காலம் தாழ்த்தாமல் மருத்துவமனைக்கு விரைங்கள்!</p>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-50 border-t border-slate-200 text-right">
+        <button onclick="closeFirstAidModal()" class="bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PRESENTATION DECK & ARCHITECTURE MODAL ================= -->
+  <div id="presentation-modal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-4xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-modal-pop">
+      
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-indigo-900 via-slate-900 to-sky-900 text-white p-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center text-xl">
+            📊
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-base">DELULU TO DEPLOY — Problem Statement S7</h3>
+              <span class="bg-indigo-500/40 text-indigo-200 text-[10px] font-bold px-2 py-0.5 rounded-full">FMCET</span>
+            </div>
+            <p class="text-xs text-slate-300">
+              Multilingual Healthcare Access & Safety Assistant • <strong>Team Bug Busters</strong>
+            </p>
+          </div>
+        </div>
+        <button onclick="closePresentationModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-sm font-bold text-white transition">
+          ✕
+        </button>
+      </div>
+
+      <!-- Slide Navigation Tabs -->
+      <div class="flex border-b border-slate-200 bg-slate-50 px-4 pt-2 gap-2 overflow-x-auto text-xs font-semibold">
+        <button id="ppt-tab-1" onclick="switchPptTab(1)" class="px-3 py-2 border-b-2 border-indigo-600 text-indigo-700 font-bold whitespace-nowrap">
+          1. Overview & Team
+        </button>
+        <button id="ppt-tab-2" onclick="switchPptTab(2)" class="px-3 py-2 border-b-2 border-transparent text-slate-600 hover:text-slate-900 whitespace-nowrap">
+          2. Problem Understanding
+        </button>
+        <button id="ppt-tab-3" onclick="switchPptTab(3)" class="px-3 py-2 border-b-2 border-transparent text-slate-600 hover:text-slate-900 whitespace-nowrap">
+          3. Proposed Solution
+        </button>
+        <button id="ppt-tab-4" onclick="switchPptTab(4)" class="px-3 py-2 border-b-2 border-transparent text-slate-600 hover:text-slate-900 whitespace-nowrap">
+          4. Technical Architecture
+        </button>
+        <button id="ppt-tab-5" onclick="switchPptTab(5)" class="px-3 py-2 border-b-2 border-transparent text-slate-600 hover:text-slate-900 whitespace-nowrap">
+          5. Technical Contribution
+        </button>
+        <button id="ppt-tab-6" onclick="switchPptTab(6)" class="px-3 py-2 border-b-2 border-transparent text-slate-600 hover:text-slate-900 whitespace-nowrap">
+          6. 24-Hr Execution Plan
+        </button>
+        <button id="ppt-tab-7" onclick="switchPptTab(7)" class="px-3 py-2 border-b-2 border-transparent text-indigo-600 hover:text-indigo-800 font-bold whitespace-nowrap bg-indigo-50/60 rounded-t-lg">
+          7. 📋 Implementation Plan & Architecture
+        </button>
+      </div>
+
+      <!-- Modal Body Content Panels -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-4 text-xs text-slate-700">
+        
+        <!-- Slide 1: Overview & Team -->
+        <div id="ppt-panel-1" class="space-y-4">
+          <div class="bg-indigo-50/70 border border-indigo-200 rounded-2xl p-5 text-center">
+            <span class="text-xs font-bold text-indigo-700 uppercase tracking-widest block mb-1">Delulu to Deploy Hackathon</span>
+            <h2 class="text-2xl font-extrabold text-slate-900">Multilingual Healthcare Access & Safety Assistant</h2>
+            <p class="text-xs text-slate-600 mt-1 max-w-xl mx-auto">
+              Breaking language barriers in emergency healthcare with edge AI, real-time voice translation, and clinical triage.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-indigo-200 text-xs font-bold text-indigo-900">
+              <span>Domain: Social Responsibility</span> • <span>Problem Statement ID: S7</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <h4 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-2">
+                <span>👥</span> Team Details: Bug Busters
+              </h4>
+              <ul class="space-y-1.5 text-xs text-slate-700">
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                  <strong>Surutheeswari M</strong>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                  <strong>Soundarya K</strong>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                  <strong>Dhana Lakshmi N</strong>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <h4 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-2">
+                <span>🏛️</span> Institution
+              </h4>
+              <p class="font-bold text-slate-800 text-sm">FMCET</p>
+              <p class="text-slate-500 text-xs mt-1">
+                Fatima Michael College of Engineering & Technology, Madurai, Tamil Nadu
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: Problem Understanding -->
+        <div id="ppt-panel-2" class="hidden space-y-4">
+          <div class="border-l-4 border-amber-500 bg-amber-50/70 p-4 rounded-r-xl">
+            <h4 class="font-bold text-amber-900 text-sm">The Problem Statement</h4>
+            <p class="text-xs text-amber-800 mt-1">
+              Language barriers in emergency healthcare access directly endanger patient lives, delay triage, and lead to medical misdiagnoses.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <h5 class="font-bold text-slate-800 text-xs mb-1">Impact on Patient Safety</h5>
+              <p class="text-slate-600 leading-relaxed">
+                Patients unable to speak English cannot accurately communicate pain type, onset, or medical history, increasing mistranslation risks and treatment errors.
+              </p>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <h5 class="font-bold text-slate-800 text-xs mb-1">Target Beneficiaries</h5>
+              <p class="text-slate-600 leading-relaxed">
+                Rural & regional patients, migrant laborers, duty doctors in government hospitals, triage nurses, emergency paramedics, and medical NGOs.
+              </p>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <h5 class="font-bold text-slate-800 text-xs mb-1">Current Bottlenecks</h5>
+              <p class="text-slate-600 leading-relaxed">
+                Relying on untrained family members for translation, delayed care while searching for translators, and inability to read prescription instructions.
+              </p>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <h5 class="font-bold text-slate-800 text-xs mb-1">What was Missing?</h5>
+              <p class="text-slate-600 leading-relaxed">
+                A real-time, safety-first multilingual AI engine with medical ontology awareness, automatic ICD-10 categorization, and offline emergency guidance.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Proposed Solution -->
+        <div id="ppt-panel-3" class="hidden space-y-4">
+          <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4">
+            <h4 class="font-bold text-sky-900 text-sm mb-1">The ArogyaVani Solution</h4>
+            <p class="text-sky-800 text-xs leading-relaxed">
+              An AI-powered multilingual healthcare assistant providing seamless two-way translation, instantaneous triage categorization, and automated 108 emergency alerts.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-900 text-white rounded-2xl">
+            <h5 class="font-bold text-xs uppercase tracking-wider text-sky-400 mb-2">Core End-to-End Workflow:</h5>
+            <div class="flex flex-wrap items-center justify-between gap-2 text-center text-xs">
+              <div class="bg-slate-800 border border-slate-700 p-2.5 rounded-xl flex-1 min-w-[120px]">
+                <span class="block text-base">🗣️</span>
+                <strong class="text-white block mt-1">Patient</strong>
+                <span class="text-slate-400 text-[10px]">Native Voice/Text</span>
+              </div>
+              <span class="text-sky-400 font-bold text-sm">➔</span>
+              <div class="bg-slate-800 border border-sky-500/50 p-2.5 rounded-xl flex-1 min-w-[120px]">
+                <span class="block text-base">🧠</span>
+                <strong class="text-sky-300 block mt-1">ArogyaVani AI</strong>
+                <span class="text-slate-400 text-[10px]">NLP + Triage + RAG</span>
+              </div>
+              <span class="text-sky-400 font-bold text-sm">➔</span>
+              <div class="bg-slate-800 border border-slate-700 p-2.5 rounded-xl flex-1 min-w-[120px]">
+                <span class="block text-base">🩺</span>
+                <strong class="text-white block mt-1">Doctor Portal</strong>
+                <span class="text-slate-400 text-[10px]">Clinical English & ICD-10</span>
+              </div>
+              <span class="text-sky-400 font-bold text-sm">➔</span>
+              <div class="bg-slate-800 border border-emerald-500/50 p-2.5 rounded-xl flex-1 min-w-[120px]">
+                <span class="block text-base">🛡️</span>
+                <strong class="text-emerald-300 block mt-1">Safe Care</strong>
+                <span class="text-slate-400 text-[10px]">108 SOS & Translated Rx</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4: Technical Architecture -->
+        <div id="ppt-panel-4" class="hidden space-y-4">
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+            <h4 class="font-bold text-slate-900 text-sm mb-3">6-Layer Technical Architecture</h4>
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center gap-3 p-2 rounded-lg bg-white border border-slate-200">
+                <span class="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Layer 1</span>
+                <div>
+                  <strong>Input Layer:</strong> Multilingual speech/text capture via Web Speech API and regional keyboards (Tamil, Hindi, Telugu, Malayalam, English).
+                </div>
+              </div>
+              <div class="flex items-center gap-3 p-2 rounded-lg bg-white border border-slate-200">
+                <span class="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Layer 2</span>
+                <div>
+                  <strong>Data Processing:</strong> NLP pipeline tokenization, intent recognition, entity extraction, and symptom severity scoring.
+                </div>
+              </div>
+              <div class="flex items-center gap-3 p-2 rounded-lg bg-white border border-slate-200">
+                <span class="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Layer 3</span>
+                <div>
+                  <strong>AI / ML Engine:</strong> Fine-tuned Multilingual LLM + Medical Ontology (SNOMED-CT / ICD-10 taxonomy).
+                </div>
+              </div>
+              <div class="flex items-center gap-3 p-2 rounded-lg bg-white border border-slate-200">
+                <span class="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Layer 4</span>
+                <div>
+                  <strong>Backend Services:</strong> Edge RAG inference engine, secure REST APIs, and encrypted in-memory patient triage queue.
+                </div>
+              </div>
+              <div class="flex items-center gap-3 p-2 rounded-lg bg-white border border-slate-200">
+                <span class="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Layer 5</span>
+                <div>
+                  <strong>Frontend Interfaces:</strong> Mobile Web App for patients & Real-time Clinical Dashboard for doctors/hospital staff.
+                </div>
+              </div>
+              <div class="flex items-center gap-3 p-2 rounded-lg bg-white border border-slate-200">
+                <span class="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Layer 6</span>
+                <div>
+                  <strong>Deployment:</strong> Hybrid cloud infrastructure with offline edge fallback for remote clinic operation.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5: Technical Contribution -->
+        <div id="ppt-panel-5" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+              <h5 class="font-bold text-slate-800 text-xs mb-1">Fine-tuned Multilingual LLM + Medical RAG</h5>
+              <p class="text-slate-600 leading-relaxed">
+                Grounds all clinical translations in verified medical ontologies so vernacular slang (e.g. "நெஞ்சு அடைப்பு") translates into standard clinical terms ("Acute Angina / Myocardial Infarction").
+              </p>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+              <h5 class="font-bold text-slate-800 text-xs mb-1">Context-Aware Anomaly Detection</h5>
+              <p class="text-slate-600 leading-relaxed">
+                Continuously analyzes SpO2 drops, abnormal BP, and high pyrexia to elevate patient triage code automatically without human delay.
+              </p>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+              <h5 class="font-bold text-slate-800 text-xs mb-1">WHO Guideline Compliance</h5>
+              <p class="text-slate-600 leading-relaxed">
+                All automated advice strictly adheres to World Health Organization (WHO) and ICMR first-aid protocols, prohibiting dangerous self-medication recommendations.
+              </p>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+              <h5 class="font-bold text-slate-800 text-xs mb-1">Novelty: Safety-First Healthcare Assistant</h5>
+              <p class="text-slate-600 leading-relaxed">
+                Unlike generic translation tools (Google Translate) which often mistranslate critical medical terms, ArogyaVani validates contraindications and dispatches emergency SOS automatically.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 6: 24-Hr Execution Plan -->
+        <div id="ppt-panel-6" class="hidden space-y-4">
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+            <h4 class="font-bold text-slate-900 text-sm mb-3">Hackathon 24-Hour Timeline & Milestones</h4>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between p-2.5 bg-white border border-emerald-200 rounded-xl text-xs">
+                <span class="font-bold text-emerald-800">0–2 hrs: Setup & Dataset Collection</span>
+                <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">✓ 100% Completed</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 bg-white border border-emerald-200 rounded-xl text-xs">
+                <span class="font-bold text-emerald-800">2–6 hrs: Core Translation & Safety Triage Modules</span>
+                <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">✓ 100% Completed</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 bg-white border border-emerald-200 rounded-xl text-xs">
+                <span class="font-bold text-emerald-800">6–12 hrs: Medical Terms & ICD-10 Integration</span>
+                <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">✓ 100% Completed</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 bg-white border border-emerald-200 rounded-xl text-xs">
+                <span class="font-bold text-emerald-800">12–18 hrs: Dual-Pane Doctor & Patient Dashboard</span>
+                <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">✓ 100% Completed</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 bg-white border border-emerald-200 rounded-xl text-xs">
+                <span class="font-bold text-emerald-800">18–22 hrs: Testing, SOS Dispatcher & Audio Synthesis</span>
+                <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">✓ 100% Completed</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 bg-white border border-emerald-200 rounded-xl text-xs">
+                <span class="font-bold text-emerald-800">22–24 hrs: Final Polish & Live Interactive Demo</span>
+                <span class="bg-emerald-600 text-white px-2 py-0.5 rounded-full font-bold text-[10px]">★ Live Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 7: Implementation Plan Making (Roadmap, Task Distribution & Tech Architecture) -->
+        <div id="ppt-panel-7" class="hidden space-y-4">
+          
+          <!-- Roadmap Section -->
+          <div class="bg-indigo-50/70 border border-indigo-200 rounded-2xl p-4">
+            <h4 class="font-bold text-indigo-900 text-sm mb-1">1. Development Roadmap (Phases & Milestones)</h4>
+            <p class="text-xs text-indigo-800 mb-3">Structured milestones and phased engineering for delivering a clinically safe prototype.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div class="p-2.5 bg-white rounded-xl border border-indigo-100 flex items-center justify-between">
+                <span><strong>Phase 1:</strong> Problem identification & requirement analysis</span>
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Completed</span>
+              </div>
+              <div class="p-2.5 bg-white rounded-xl border border-indigo-100 flex items-center justify-between">
+                <span><strong>Phase 2:</strong> UI design & language selection module</span>
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Completed</span>
+              </div>
+              <div class="p-2.5 bg-white rounded-xl border border-indigo-100 flex items-center justify-between">
+                <span><strong>Phase 3:</strong> Multilingual chatbot development</span>
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Completed</span>
+              </div>
+              <div class="p-2.5 bg-white rounded-xl border border-indigo-100 flex items-center justify-between">
+                <span><strong>Phase 4:</strong> Healthcare information & safety-check module</span>
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Completed</span>
+              </div>
+              <div class="p-2.5 bg-white rounded-xl border border-indigo-100 flex items-center justify-between sm:col-span-2">
+                <span><strong>Phase 5:</strong> Testing, clinical validation & cloud/edge deployment</span>
+                <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Active Demo</span>
+              </div>
+            </div>
+            <div class="mt-2.5 text-[11px] font-bold text-indigo-900 bg-indigo-100/60 p-2 rounded-lg text-center">
+              🎯 Milestone: Working Multilingual Healthcare Assistant Prototype (Achieved)
+            </div>
+          </div>
+
+          <!-- Task Distribution -->
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+            <h4 class="font-bold text-slate-900 text-sm mb-2">2. Team Task Distribution</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+                <span class="text-indigo-600 font-bold block">Member 1 (Frontend / UI Design)</span>
+                <span class="text-slate-600">Surutheeswari M: Responsive Mobile App, Doctor Dashboard, Dual-pane views, Speech waveform visualizer.</span>
+              </div>
+              <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+                <span class="text-sky-600 font-bold block">Member 2 (Backend & API Development)</span>
+                <span class="text-slate-600">Soundarya K: Python + Flask/FastAPI REST APIs, encrypted triage queue, in-memory patient store.</span>
+              </div>
+              <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+                <span class="text-teal-600 font-bold block">Member 3 (AI, Translation & Chatbot Module)</span>
+                <span class="text-slate-600">Dhana Lakshmi N: Multilingual LLM prompt engineering, Web Speech API, regional speech recognition.</span>
+              </div>
+              <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+                <span class="text-amber-600 font-bold block">Member 4 (Healthcare Safety Module & Testing)</span>
+                <span class="text-slate-600">Bug Busters Clinical Team: ICD-10 medical ontology alignment, emergency 108 alerts, WHO compliance checks.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Technology & Architecture Plan -->
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+            <h4 class="font-bold text-slate-900 text-sm mb-2">3. Technology & Architecture Plan</h4>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs mb-3">
+              <div class="bg-white p-2 rounded-xl border border-slate-200">
+                <span class="block text-base">💻</span>
+                <strong class="block text-slate-800 text-[11px] mt-0.5">Frontend</strong>
+                <span class="text-slate-500 text-[10px]">HTML, CSS, JS</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-200">
+                <span class="block text-base">⚙️</span>
+                <strong class="block text-slate-800 text-[11px] mt-0.5">Backend</strong>
+                <span class="text-slate-500 text-[10px]">Python + Flask</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-200">
+                <span class="block text-base">🧠</span>
+                <strong class="block text-slate-800 text-[11px] mt-0.5">AI Engine</strong>
+                <span class="text-slate-500 text-[10px]">LLM / NLP Model</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-200">
+                <span class="block text-base">🌐</span>
+                <strong class="block text-slate-800 text-[11px] mt-0.5">Translation</strong>
+                <span class="text-slate-500 text-[10px]">Multilingual API</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-200 col-span-2 sm:col-span-1">
+                <span class="block text-base">🗄️</span>
+                <strong class="block text-slate-800 text-[11px] mt-0.5">Database</strong>
+                <span class="text-slate-500 text-[10px]">Firebase/MongoDB</span>
+              </div>
+            </div>
+            <div class="bg-slate-900 text-white p-3 rounded-xl text-center text-xs">
+              <div class="font-mono text-sky-400 font-bold mb-1 text-[11px]">CORE 6-STEP PIPELINE:</div>
+              <div class="text-[11px] text-slate-300">
+                User ➔ Language Detection ➔ Translation ➔ AI Healthcare Assistant ➔ Safety Check ➔ Response Translation ➔ User
+              </div>
+            </div>
+          </div>
+
+          <!-- Dataset / API / Resource Planning & Safety Notice -->
+          <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 text-xs">
+            <h4 class="font-bold text-amber-900 text-sm mb-1">4. Dataset / API / Resource Planning</h4>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-amber-900 mb-2">
+              <li class="flex items-center gap-1.5">• Multilingual healthcare information dataset</li>
+              <li class="flex items-center gap-1.5">• Basic symptom and healthcare FAQ dataset</li>
+              <li class="flex items-center gap-1.5">• Real-time translation APIs & Web Speech API</li>
+              <li class="flex items-center gap-1.5">• Medical terminology resources (ICD-10 / SNOMED)</li>
+              <li class="flex items-center gap-1.5">• Emergency 108 & WHO safety information</li>
+              <li class="flex items-center gap-1.5">• Data preprocessing and cleaning pipeline</li>
+            </ul>
+            <div class="p-2.5 bg-amber-100/70 border border-amber-300 rounded-xl font-bold text-amber-950">
+              ⚠️ Important Clinical Boundary: The system uses trusted healthcare information and should not present itself as a doctor or provide unsupported diagnosis.
+            </div>
+          </div>
+
+          <!-- Risk & Time Management Matrix -->
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs">
+            <h4 class="font-bold text-slate-900 text-sm mb-2">5. Risk & Time Management (Dependencies & Backup Plans)</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-300 bg-slate-100 text-slate-800 font-bold">
+                    <th class="p-2">Potential Risk</th>
+                    <th class="p-2">Mitigation & Backup Plan</th>
+                    <th class="p-2">Status in Frontend</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                  <tr>
+                    <td class="p-2 font-medium text-red-600">Translation errors</td>
+                    <td class="p-2">Use multiple language checks & medical term normalization</td>
+                    <td class="p-2"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-medium text-amber-600">Incorrect AI response</td>
+                    <td class="p-2">Safety validation layer + trusted information + clinical disclaimer</td>
+                    <td class="p-2"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-medium text-amber-600">API failure</td>
+                    <td class="p-2">Fallback response + local stored healthcare FAQs</td>
+                    <td class="p-2"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-medium text-sky-600">Internet failure</td>
+                    <td class="p-2">Basic offline FAQ & WHO first-aid handbook support</td>
+                    <td class="p-2"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-medium text-indigo-600">Data privacy issues</td>
+                    <td class="p-2">Minimize personal data storage; zero persistent patient identifiers</td>
+                    <td class="p-2"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs">
+        <span class="text-slate-500 font-medium">Delulu to Deploy • FMCET • Team Bug Busters</span>
+        <button onclick="closePresentationModal()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-4 py-2 rounded-xl transition">
+          Back to Live App
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= CLINICAL TRIAGE PRINT SLIP MODAL ================= -->
+  <div id="print-slip-modal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-300 overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Hospital Letterhead -->
+      <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-red-600 text-white flex items-center justify-center font-bold text-xl">
+            🏥
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm uppercase tracking-wide">
+              FMCET Health Center & Emergency Care
+            </h3>
+            <p class="text-[11px] text-slate-500">
+              Department of Emergency Medicine • Triage Admission Slip
+            </p>
+          </div>
+        </div>
+        <div class="text-right text-[11px] text-slate-500 font-mono">
+          <div>Date: <strong id="slip-date" class="text-slate-800">--</strong></div>
+          <div>Token: <strong id="slip-token" class="text-indigo-600 font-bold">PT-8941</strong></div>
+        </div>
+      </div>
+
+      <!-- Slip Content -->
+      <div id="slip-body-content" class="p-5 overflow-y-auto flex-1 space-y-4 text-xs text-slate-800">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+
+      <!-- Actions (Print / Close) -->
+      <div class="p-4 bg-slate-100 border-t border-slate-200 flex items-center justify-between no-print">
+        <span class="text-[11px] text-slate-500">Official ArogyaVani Clinical Record</span>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition">
+            <span>🖨️ Print / Save PDF</span>
+          </button>
+          <button onclick="closePrintSlipModal()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-4 py-2 rounded-xl transition">
+            Close
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="app-toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl border border-slate-700 text-xs font-bold transform translate-y-24 opacity-0 transition duration-300">
+    Notification
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-3 px-4 text-center text-xs text-slate-500">
+    <p>
+      Developed for <strong>Delulu to Deploy Hackathon</strong> • Team <strong>Bug Busters</strong> (Surutheeswari M, Soundarya K, Dhana Lakshmi N) • FMCET
+    </p>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
